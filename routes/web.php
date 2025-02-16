@@ -17,6 +17,12 @@ use App\Http\Controllers\PaisController;
 |
 */
 
+
+Route::get('/login', function () {
+    return view('login.index');
+})->name('login');
+
+
 Route::get('/', function () {
     return redirect()->route('empleados.index');
 });

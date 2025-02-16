@@ -53,14 +53,27 @@
                 <option value="">Seleccione un país primero</option>
             </select>
         </div>
-        <div class="col-md-6">
+
+        <div class="form-group mt-3">
+            <label for="cargos">Asignar Cargos</label>
+            <select name="cargos[]" id="cargos" class="form-control" multiple>
+                @foreach ($cargos as $cargo)
+                    <option value="{{ $cargo->id }}"
+                        @if(isset($empleado) && $empleado->cargos->contains($cargo->id)) selected @endif>
+                        {{ $cargo->nombre }}
+                    </option>
+                @endforeach
+            </select>
+            <small class="form-text text-muted">Puedes seleccionar más de un cargo manteniendo presionada la tecla Ctrl (Cmd en Mac).</small>
+        </div>
+        {{-- <div class="col-md-6">
             <label>Cargos</label>
             <select name="cargos[]" class="form-control" multiple>
                 @foreach($cargos as $cargo)
                     <option value="{{ $cargo->id }}">{{ $cargo->nombre }}</option>
                 @endforeach
             </select>
-        </div>
+        </div> --}}
     </div>
 
     <div class="form-group mt-3">
