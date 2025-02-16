@@ -30,6 +30,7 @@ class Empleado extends Model
         return $this->belongsTo(Empleado::class, 'jefe_id');
     }
 
+
     public function colaboradores()
     {
         return $this->hasMany(Empleado::class, 'jefe_id');

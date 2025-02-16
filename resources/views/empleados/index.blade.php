@@ -17,6 +17,7 @@
             <th>Teléfono</th>
             <th>Ciudad</th>
             <th>Cargos</th>
+            <th>Jefe Asignado</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -34,12 +35,20 @@
                     @endforeach
                 </td>
                 <td>
+                    @if($empleado->cargos->contains('nombre', 'Presidente') || is_null($empleado->jefe))
+                        <span class="badge bg-secondary">N/A</span>
+                    @else
+                        {{ $empleado->jefe->nombres }} {{ $empleado->jefe->apellidos }}
+                    @endif
+                </td>
+                <td>
                     <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn btn-warning btn-sm">Editar</a>
                     <form action="{{ route('empleados.destroy', $empleado) }}" method="POST" class="d-inline">
                         @csrf @method('DELETE')
                         <button class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este empleado?')">Eliminar</button>
                     </form>
                 </td>
+                
             </tr>
         @endforeach
     </tbody>

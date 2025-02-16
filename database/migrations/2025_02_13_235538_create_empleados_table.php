@@ -27,8 +27,7 @@ class CreateEmpleadosTable extends Migration
             
             $table->foreign('ciudad_id')->references('id')->on('ciudades')->onDelete('cascade');
             $table->foreign('jefe_id')->references('id')->on('empleados')->onDelete('set null');
-            // $table->id();
-            // $table->timestamps();
+            
         });
     }
 

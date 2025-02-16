@@ -43,24 +43,56 @@ class EmpleadoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nombres' => 'required',
-            'apellidos' => 'required',
-            'identificacion' => 'required|unique:empleados',
-            'direccion' => 'required',
-            'telefono' => 'required',
-            'pais_id' => 'required',
-            'ciudad_id' => 'required',
-            'jefe_id' => 'nullable|exists:empleados,id',
-        ]);
 
-        $empleado = Empleado::create($request->all());
-        $empleado->cargos()->attach($request->cargos);
+    // Método para almacenar un nuevo empleado
+public function store(Request $request)
+{
+    $request->validate([
+        'nombres' => 'required',
+        'apellidos' => 'required',
+        'identificacion' => 'required|unique:empleados',
+        'direccion' => 'required',
+        'telefono' => 'required',
+        'pais_id' => 'required',
+        'ciudad_id' => 'required',
+        'jefe_id' => 'nullable|exists:empleados,id',
+    ]);
 
-        return redirect()->route('empleados.index')->with('success', 'Empleado registrado correctamente.');
+    // Verificar si el jefe seleccionado es presidente
+    if ($request->jefe_id) {
+        $jefe = Empleado::find($request->jefe_id);
+        if ($jefe && $jefe->cargos->contains('nombre', 'Presidente')) {
+            return back()->withErrors(['jefe_id' => 'No puede asignar al Presidente como jefe.']);
+        }
     }
+
+    // Crear el empleado
+    $empleado = Empleado::create($request->all());
+
+    // Asignar los cargos seleccionados
+    $empleado->cargos()->attach($request->cargos ?? []);
+
+    return redirect()->route('empleados.index')->with('success', 'Empleado registrado correctamente.');
+}
+
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'nombres' => 'required',
+    //         'apellidos' => 'required',
+    //         'identificacion' => 'required|unique:empleados',
+    //         'direccion' => 'required',
+    //         'telefono' => 'required',
+    //         'pais_id' => 'required',
+    //         'ciudad_id' => 'required',
+    //         'jefe_id' => 'nullable|exists:empleados,id',
+    //     ]);
+
+    //     $empleado = Empleado::create($request->all());
+    //     $empleado->cargos()->attach($request->cargos);
+
+    //     return redirect()->route('empleados.index')->with('success', 'Empleado registrado correctamente.');
+    // }
     
     
 
@@ -100,29 +132,66 @@ class EmpleadoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Empleado $empleado)
-    {
-        $request->validate([
-            'nombres' => 'required',
-            'apellidos' => 'required',
-            'identificacion' => "required|unique:empleados,identificacion,$empleado->id",
-            'direccion' => 'required',
-            'telefono' => 'required',
-            'pais_id' => 'required',
-            'ciudad_id' => 'required',
-            'jefe_id' => 'nullable|exists:empleados,id',
-        ]);
 
-        $empleado->update($request->all());
+    // Método para actualizar un empleado existente
+public function update(Request $request, Empleado $empleado)
+{
+    $request->validate([
+        'nombres' => 'required',
+        'apellidos' => 'required',
+        'identificacion' => "required|unique:empleados,identificacion,$empleado->id",
+        'direccion' => 'required',
+        'telefono' => 'required',
+        'pais_id' => 'required',
+        'ciudad_id' => 'required',
+        'jefe_id' => 'nullable|exists:empleados,id',
+    ]);
 
-        $empleado->cargos()->sync($request->cargos);
-
-        // $empleado->cargos()->sync($request->cargos);
-        $empleado->cargos()->sync($request->cargos ?? []);
-
-
-        return redirect()->route('empleados.index')->with('success', 'Empleado actualizado correctamente.');
+    // Validar si el jefe seleccionado es presidente
+    if ($request->jefe_id) {
+        $jefe = Empleado::find($request->jefe_id);
+        if ($jefe && $jefe->cargos->contains('nombre', 'Presidente')) {
+            return back()->withErrors(['jefe_id' => 'No puede asignar al Presidente como jefe.']);
+        }
     }
+
+    // Validar que el presidente no tenga jefe
+    if ($empleado->cargos->contains('nombre', 'Presidente') && $request->jefe_id) {
+        return back()->withErrors(['jefe_id' => 'El Presidente no puede tener un jefe.']);
+    }
+
+    // Actualizar el empleado
+    $empleado->update($request->all());
+
+    // Sincronizar los cargos seleccionados
+    $empleado->cargos()->sync($request->cargos ?? []);
+
+    return redirect()->route('empleados.index')->with('success', 'Empleado actualizado correctamente.');
+}
+
+
+    // public function update(Request $request, Empleado $empleado)
+    // {
+    //     $request->validate([
+    //         'nombres' => 'required',
+    //         'apellidos' => 'required',
+    //         'identificacion' => "required|unique:empleados,identificacion,$empleado->id",
+    //         'direccion' => 'required',
+    //         'telefono' => 'required',
+    //         'pais_id' => 'required',
+    //         'ciudad_id' => 'required',
+    //         'jefe_id' => 'nullable|exists:empleados,id',
+    //     ]);
+
+    //     $empleado->update($request->all());
+
+    //     $empleado->cargos()->sync($request->cargos);
+
+    //     $empleado->cargos()->sync($request->cargos ?? []);
+
+
+    //     return redirect()->route('empleados.index')->with('success', 'Empleado actualizado correctamente.');
+    // }
 
     /**
      * Remove the specified resource from storage.

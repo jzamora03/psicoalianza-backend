@@ -63,6 +63,20 @@
         </div>
     </div>
 
+    <div class="form-group mt-3">
+        <label for="jefe_id">Asignar jefe</label>
+        <select name="jefe_id" id="jefe_id" class="form-control">
+            <option value="">-- Seleccione un Jefe --</option>
+            @foreach ($jefes as $jefe)
+                @if (!$jefe->cargos->contains('nombre', 'Presidente'))
+                    <option value="{{ $jefe->id }}" {{ old('jefe_id') == $jefe->id ? 'selected' : '' }}>
+                        {{ $jefe->nombres }} {{ $jefe->apellidos }}
+                    </option>
+                @endif
+            @endforeach
+        </select>
+    </div>
+
     <button type="submit" class="btn btn-primary mt-3">Guardar</button>
 </form>
 
