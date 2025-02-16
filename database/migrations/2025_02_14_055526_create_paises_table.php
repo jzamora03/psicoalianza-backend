@@ -20,6 +20,7 @@ class CreatePaisesTable extends Migration
             $table->timestamps();
             // $table->id();
             // $table->timestamps();
+
         });
     }
 

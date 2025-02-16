@@ -21,6 +21,15 @@ Route::get('/', function () {
     return redirect()->route('empleados.index');
 });
 
+
+Route::resource('empleados', EmpleadoController::class);
+Route::resource('cargos', CargoController::class);
+Route::resource('ciudades', CiudadController::class);
+Route::resource('paises', PaisController::class);
+
+
+/** RESOURCE **/
+
 Route::resource('empleados', EmpleadoController::class);
 Route::resource('cargos', CargoController::class);
 Route::resource('ciudades', CiudadController::class);

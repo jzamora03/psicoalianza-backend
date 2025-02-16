@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\CargoController;
+
+use App\Http\Controllers\CiudadController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,9 +23,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 // Route::apiResource('empleados', EmpleadoController::class);
 // Route::apiResource('cargos', CargoController::class);
 
 // Route::resource('empleados', EmpleadoController::class);
 // Route::resource('cargos', CargoController::class);
 //Route::resource('ciudades', CiudadController::class);
+
+Route::get('/ciudades/{pais_id}', [CiudadController::class, 'ciudadesPorPais']);
+

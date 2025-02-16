@@ -51,10 +51,13 @@ class CiudadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
+
     {
         $paises = Pais::all();
         return view('ciudades.edit', compact('ciudad', 'paises'));
     }
+
+   
 
     /**
      * Show the form for editing the specified resource.
@@ -64,7 +67,14 @@ class CiudadController extends Controller
      */
     public function edit($id)
     {
-        //
+        $ciudad = Ciudad::find($id); // Buscar la ciudad en la base de datos
+
+        if (!$ciudad) {
+            return redirect()->route('ciudades.index')->with('error', 'Ciudad no encontrada.');
+        }
+    
+        $paises = Pais::all();
+        return view('ciudades.edit', compact('ciudad', 'paises'));
     }
 
     /**
@@ -92,4 +102,19 @@ class CiudadController extends Controller
         $ciudad->delete();
         return redirect()->route('ciudades.index')->with('success', 'Ciudad eliminada correctamente.');
     }
+
+
+    public function ciudadesPorPais($paisId)
+    {
+        $ciudades = Ciudad::where('pais_id', $paisId)->get();
+    
+        if ($ciudades->isEmpty()) {
+            return response()->json([]); // <-- Asegura que devuelva un array vacío si no hay datos
+        }
+    
+        return response()->json($ciudades);
+    }
+
+
+
 }

@@ -83,7 +83,9 @@ class EmpleadoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
+    {   
+        $empleado = Empleado::where('id', $id)->first();
+        /*$empleado = Empleado::all();*/
         $paises = Pais::all();
         $ciudades = Ciudad::all();
         $cargos = Cargo::all();
@@ -112,7 +114,12 @@ class EmpleadoController extends Controller
         ]);
 
         $empleado->update($request->all());
+
         $empleado->cargos()->sync($request->cargos);
+
+        // $empleado->cargos()->sync($request->cargos);
+        $empleado->cargos()->sync($request->cargos ?? []);
+
 
         return redirect()->route('empleados.index')->with('success', 'Empleado actualizado correctamente.');
     }

@@ -13,7 +13,16 @@ class Empleado extends Model
 
     public function ciudad()
     {
+
         return $this->belongsTo(Ciudad::class);
+
+        return $this->belongsTo(Ciudad::class, 'ciudad_id');
+    }
+
+    public function pais()
+    {
+        return $this->belongsTo(Pais::class, 'pais_id');
+
     }
 
     public function jefe()

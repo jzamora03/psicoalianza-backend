@@ -60,7 +60,11 @@ class PaisController extends Controller
      */
     public function edit($id)
     {
+
         return view('paises.edit', compact('pais'));
+
+        return view('paises.edit', compact('paises'));
+
     }
 
     /**
