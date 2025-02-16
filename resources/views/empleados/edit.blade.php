@@ -7,7 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <form action="{{ route('empleados.update', $empleado->id) }}" method="POST">
     @csrf @method('PUT')
-
+    
     <div class="row">
         <div class="col-md-6">
             <label>Nombres</label>
@@ -74,21 +74,6 @@
             @endforeach
         </select>
     </div>
-
-    {{-- <div class="form-group mt-3">
-        <label for="jefe_id">Asignar jefe</label>
-        <select name="jefe_id" id="jefe_id" class="form-control">
-            <option value="">-- Seleccione un Jefe --</option>
-            @foreach ($jefes as $jefe)
-                @if (!$jefe->cargos->contains('nombre', 'Presidente'))
-                    <option value="{{ $jefe->id }}" {{ old('jefe_id') == $jefe->id ? 'selected' : '' }}>
-                        {{ $jefe->nombres }} {{ $jefe->apellidos }}
-                    </option>
-                @endif
-            @endforeach
-        </select>
-    </div> --}}
-
     <div class="row mt-3">
         <div class="col-md-12">
             <label>Cargos</label>

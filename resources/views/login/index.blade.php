@@ -47,16 +47,11 @@
 </div>
 
 <script>
-
-
-
-    // Mostrar u ocultar contraseña
     function togglePassword() {
         const password = document.getElementById('password');
         password.type = password.type === 'password' ? 'text' : 'password';
     }
 
-    // Lógica simple para inicio de sesión
     function login() {
         const user = document.getElementById('usuario').value;
         const pass = document.getElementById('password').value;
