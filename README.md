@@ -8,8 +8,8 @@
 - En la termina ponemos "**cp .env.example .env**" esto para crear el archivo necesario para configurar la base de datos (SI ASI LO DESEA)
 - Configuramos la conexión a la base de datos en este caso SQLITE.<br>
 **Si es al caso es necesario comentar o eliminar la conexión a MySQL.**<br>
->**Copiamos el path de donde tenemos nuestro archivo database.sqlite**
-DB_CONNECTION=sqlite
+**Copiamos el path de donde tenemos nuestro archivo database.sqlite**<br>
+>>DB_CONNECTION=sqlite<br>
 DB_DATABASE=C:\Users\jszc0\OneDrive\Escritorio\alianza-proyecto\database\database.sqlite #Cambiar a la ruta correcta del archivo database.sqlite por favor.
 DB_FOREIGN_KEYS=true
 - Luego hacemos la migración de la base de datos con php artisan migrate
