@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('title', 'Lista de Empleados')
@@ -75,7 +74,6 @@
                             @endif
                         </td>
                         <td class="d-flex justify-content-center align-items-center flex-wrap gap-2" style="height: 100%;">
-                            <!-- Botón editar con atributos data -->
                             <a href="#" 
                                class="btn btn-edit" 
                                style="min-width: 50px; color: rgb(69, 48, 218);" 
@@ -91,7 +89,6 @@
                                data-cargos='@json($empleado->cargos->pluck("id"))'>
                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                             </a>
-                            <!-- Botón para eliminar (sin cambios) -->
                             <form action="{{ route('empleados.destroy', $empleado) }}" method="POST" class="d-inline">
                                 @csrf 
                                 @method('DELETE')
@@ -100,22 +97,19 @@
                                 </a>
                             </form>
                         </td>
-                        {{-- <td class="d-flex justify-content-center align-items-center flex-wrap gap-2" style="height: 100%;">
-                            <a href="{{ route('empleados.edit', $empleado->id) }}"  class="btn" style="min-width: 50px; color:rgb(69, 48, 218); ">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
-                            </a>
-                            <form action="{{ route('empleados.destroy', $empleado) }}" method="POST" class="d-inline">
-                                @csrf @method('DELETE')
-                                <a class="btn" style="min-width: 50px; color:rgb(69, 48, 218);" onclick="return confirm('¿Eliminar este empleado?')">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </form>
-                        </td> --}}
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <div>
+        Mostrando {{ $empleados->firstItem() }} - {{ $empleados->lastItem() }} 
+        de {{ $empleados->total() }} resultados
+    </div>
+    {{ $empleados->links() }}
 </div>
 
 <!-- MODAL PARA EDITAR EMPLEADO -->
@@ -306,6 +300,8 @@
         </div>
     </div>
 </div>
+
+
 <script>
     document.getElementById('pais').addEventListener('change', function() {
         let paisId = this.value;
@@ -455,4 +451,4 @@
     </script>
     
 
-@endsection
+@endsection 

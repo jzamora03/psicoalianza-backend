@@ -24,7 +24,70 @@
     </div>
 
     <div class="d-flex">
-        <nav class="bg-primary text-white vh-100 p-3" id="sidebar" style="width: 60px; transition: width 0.3s;">
+        <nav id="sidebar" class="bg-primary text-white vh-100" 
+        style="width: 60px; transition: width 0.3s;" 
+        data-state="collapsed">
+     
+     <!-- Botón Toggle -->
+     <button class="btn btn-sm btn-light d-block mx-auto mt-3" onclick="toggleSidebar()">
+       <i class="fa fa-bars"></i>
+     </button>
+   
+     <!-- Lista de ítems -->
+     <ul class="nav flex-column mt-4">
+       
+       <!-- Primer ítem -->
+       <li class="nav-item mb-2">
+         <!-- Enlace que en modo colapsado muestra sólo el ícono, y en modo expandido el ícono + texto -->
+         <a href="#" 
+            class="nav-link text-white sidebar-link d-flex align-items-center justify-content-center"
+            style="height: 60px;" 
+            data-bs-toggle="collapse" data-bs-target="#listasMenu">
+            <i class="fas fa-list"></i>
+            <span class="sidebar-text d-none ms-2">Listas</span>
+         </a>
+         <ul class="collapse" id="listasMenu">
+           <li class="nav-item">
+             <a class="nav-link text-white" href="{{ route('empleados.index') }}">
+               <i class="fas fa-user"></i> Empleados
+             </a>
+           </li>
+           <li class="nav-item">
+             <a class="nav-link text-white" href="{{ route('cargos.index') }}">
+               <i class="fas fa-briefcase"></i> Cargos
+             </a>
+           </li>
+         </ul>
+       </li>
+   
+       <!-- Segundo ítem -->
+       <li class="nav-item mb-2">
+         <a href="#"
+            class="nav-link text-white sidebar-link d-flex align-items-center justify-content-center"
+            style="height: 60px;"
+            data-bs-toggle="collapse" data-bs-target="#geoMenu">
+            <i class="fas fa-globe"></i>
+            <span class="sidebar-text d-none ms-2">Geolocalización</span>
+         </a>
+         <ul class="collapse" id="geoMenu">
+           <li class="nav-item">
+             <a class="nav-link text-white" href="{{ route('ciudades.index') }}">
+               <i class="fas fa-city"></i> Ciudades
+             </a>
+           </li>
+           <li class="nav-item">
+             <a class="nav-link text-white" href="{{ route('paises.index') }}">
+               <i class="fas fa-flag"></i> Países
+             </a>
+           </li>
+         </ul>
+       </li>
+       
+     </ul>
+   </nav>
+   
+
+        {{-- <nav class="bg-primary text-white vh-100 p-3" id="sidebar" style="width: 60px; transition: width 0.3s;">
             <button class="btn btn-sm btn-light mb-4 d-block mx-auto" onclick="toggleSidebar()">
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </button>
@@ -48,7 +111,7 @@
                     </ul>
                 </li>
             </ul>
-        </nav>
+        </nav> --}}
     @endif
 
         <div class="container mt-4 flex-grow-1">

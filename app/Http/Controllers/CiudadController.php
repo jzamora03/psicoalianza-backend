@@ -16,8 +16,10 @@ class CiudadController extends Controller
      */
     public function index()
     {
-        $ciudades = Ciudad::with('pais')->get();
-        return view('ciudades.index', compact('ciudades'));
+        $ciudades = Ciudad::paginate(6);
+        $paises = Pais::all();
+
+        return view('ciudades.index', compact('ciudades', 'paises'));
     }
 
     /**
@@ -58,7 +60,6 @@ class CiudadController extends Controller
     }
 
    
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -84,10 +85,11 @@ class CiudadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Ciudad $ciudad)
+    public function update(Request $request, $id)
     {
-        $request->validate(['nombre' => 'required', 'pais_id' => 'required']);
+        $ciudad = Ciudad::findOrFail($id);
         $ciudad->update($request->all());
+
         return redirect()->route('ciudades.index')->with('success', 'Ciudad actualizada correctamente.');
     }
 
@@ -97,19 +99,20 @@ class CiudadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ciudad $ciudad)
-    {
-        $ciudad->delete();
-        return redirect()->route('ciudades.index')->with('success', 'Ciudad eliminada correctamente.');
-    }
+        public function destroy($id)
+        {
+            $ciudad = Ciudad::findOrFail($id);
+            $ciudad->delete();
 
+            return redirect()->route('ciudades.index')->with('success', 'Ciudad eliminada correctamente.');
+        }
 
     public function ciudadesPorPais($paisId)
     {
         $ciudades = Ciudad::where('pais_id', $paisId)->get();
     
         if ($ciudades->isEmpty()) {
-            return response()->json([]); // <-- Asegura que devuelva un array vacío si no hay datos
+            return response()->json([]);
         }
     
         return response()->json($ciudades);

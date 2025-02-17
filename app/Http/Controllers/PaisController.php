@@ -15,7 +15,8 @@ class PaisController extends Controller
      */
     public function index()
     {
-        $paises = Pais::all();
+       // $paises = Pais::all();
+        $paises = Pais::paginate(6);
         return view('paises.index', compact('paises'));
     }
 
@@ -61,7 +62,7 @@ class PaisController extends Controller
     public function edit($id)
     {
 
-        return view('paises.edit', compact('pais'));
+        // return view('paises.edit', compact('pais'));
 
         return view('paises.edit', compact('paises'));
 
@@ -74,11 +75,22 @@ class PaisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Pais $pais)
+
+    public function update(Request $request, $id)
     {
-        $request->validate(['nombre' => "required|unique:paises,nombre,$pais->id"]);
-        $pais->update($request->all());
-        return redirect()->route('paises.index')->with('success', 'País actualizado correctamente.');
+    // Validar los datos recibidos
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+    ]);
+    
+    // Buscar el país a actualizar
+    $pais = Pais::findOrFail($id);
+    
+    // Actualizar los datos
+    $pais->update($request->only('nombre'));
+    
+    // Redireccionar a la lista con mensaje de éxito
+    return redirect()->route('paises.index')->with('success', 'País actualizado correctamente.');
     }
 
     /**
@@ -87,9 +99,14 @@ class PaisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pais $pais)
+    public function destroy($id)
     {
-        $pais->delete();
-        return redirect()->route('paises.index')->with('success', 'País eliminado correctamente.');
+
+    $pais = Pais::findOrFail($id);
+    
+    $pais->delete();
+    
+
+    return redirect()->route('paises.index')->with('success', 'País eliminado correctamente.');
     }
 }
