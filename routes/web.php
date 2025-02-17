@@ -18,14 +18,13 @@ use App\Http\Controllers\PaisController;
 */
 
 
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+
 Route::get('/login', function () {
     return view('login.index');
 })->name('login');
-
-
-Route::get('/', function () {
-    return redirect()->route('empleados.index');
-});
 
 /** RESOURCE **/
 Route::resource('empleados', EmpleadoController::class);
