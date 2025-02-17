@@ -18,9 +18,19 @@ class EmpleadoController extends Controller
      */
     public function index()
     {
-        $empleados = Empleado::with(['pais', 'ciudad', 'cargos', 'jefe'])->get();
-        return view('empleados.index', compact('empleados'));
-        // return Empleado::where('activo', true)->get();
+        // $empleados = Empleado::with(['pais', 'ciudad', 'cargos', 'jefe'])->get();
+        // return view('empleados.index', compact('empleados'));
+
+        $empleados = Empleado::with('cargos')->get();
+        $ciudades = Ciudad::all();
+        $paises = Pais::all();
+        $cargos = Cargo::all();
+        $jefes = Empleado::whereHas('cargos', function ($query) {
+            $query->where('nombre', '!=', 'Presidente');
+        })->get();
+
+        return view('empleados.index', compact('empleados', 'ciudades','paises', 'cargos', 'jefes'));
+       
     }
 
     /**

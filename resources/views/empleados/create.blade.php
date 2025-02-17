@@ -66,14 +66,6 @@
             </select>
             <small class="form-text text-muted">Puedes seleccionar más de un cargo manteniendo presionada la tecla Ctrl (Cmd en Mac).</small>
         </div>
-        {{-- <div class="col-md-6">
-            <label>Cargos</label>
-            <select name="cargos[]" class="form-control" multiple>
-                @foreach($cargos as $cargo)
-                    <option value="{{ $cargo->id }}">{{ $cargo->nombre }}</option>
-                @endforeach
-            </select>
-        </div> --}}
     </div>
 
     <div class="form-group mt-3">
@@ -109,10 +101,10 @@
     fetch(`/api/ciudades/${paisId}`)
     .then(response => {
         console.log("Respuesta cruda:", response);
-        return response.text(); // <-- Cambiar a text() temporalmente para ver qué devuelve
+        return response.text(); 
     })
     .then(text => {
-        console.log("Texto recibido:", text); // <-- Imprime la respuesta en consola
+        console.log("Texto recibido:", text);
         return JSON.parse(text); // <-- Luego lo convierte a JSON
     })
     .then(data => {
