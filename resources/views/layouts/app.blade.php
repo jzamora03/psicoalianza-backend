@@ -10,7 +10,7 @@
 <body class="bg-light">
     @if(!Request::is('login'))
 
-    <div class="d-flex justify-content-between align-items-center p-2" style="background-color: rgba(151, 151, 151, 0.534);">
+    <div class="d-flex justify-content-between align-items-center p-2" style="background-color: rgba(216, 216, 216, 0.534);">
         <div class="ms-3">
             <img src="{{ asset('img/logo-psicoalianza.png') }}" alt="Logo" class="img-fluid" style="max-height: 50px;">
         </div>
@@ -87,31 +87,6 @@
    </nav>
    
 
-        {{-- <nav class="bg-primary text-white vh-100 p-3" id="sidebar" style="width: 60px; transition: width 0.3s;">
-            <button class="btn btn-sm btn-light mb-4 d-block mx-auto" onclick="toggleSidebar()">
-                <i class="fa fa-bars" aria-hidden="true"></i>
-            </button>
-            <ul class="nav flex-column text-center">
-                <li class="nav-item mb-2">
-                    <a class="nav-link text-white d-flex align-items-center justify-content-center" href="#" data-bs-toggle="collapse" data-bs-target="#listasMenu">
-                        <i class="fas fa-list me-2" style="margin-bottom: 10px;"></i><span class="sidebar-text d-none">Listas</span>
-                    </a>
-                    <ul class="collapse ps-3" id="listasMenu">
-                        <li class="nav-item"><a class="nav-link text-white" href="{{ route('empleados.index') }}"><i class="fas fa-user"></i> Empleados</a></li>
-                        <li class="nav-item"><a class="nav-link text-white" href="{{ route('cargos.index') }}"><i class="fas fa-briefcase"></i> Cargos</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item mb-2">
-                    <a class="nav-link text-white d-flex align-items-center justify-content-center" href="#" data-bs-toggle="collapse" data-bs-target="#geoMenu">
-                        <i class="fas fa-globe me-2"></i><span class="sidebar-text d-none">Geolocalización</span>
-                    </a>
-                    <ul class="collapse ps-3" id="geoMenu">
-                        <li class="nav-item"><a class="nav-link text-white" href="{{ route('ciudades.index') }}"><i class="fas fa-city" ></i> Ciudades</a></li>
-                        <li class="nav-item"><a class="nav-link text-white" href="{{ route('paises.index') }}"><i class="fas fa-flag"></i> Países</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav> --}}
     @endif
 
         <div class="container mt-4 flex-grow-1">

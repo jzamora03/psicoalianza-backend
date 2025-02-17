@@ -18,8 +18,9 @@ class EmpleadoController extends Controller
      */
     public function index()
     {
-        $empleados = Empleado::paginate(4);
+      //  $empleados = Empleado::paginate(4);
      //  $empleados = Empleado::with('cargos')->get();
+        $empleados = Empleado::with(['ciudad', 'pais', 'cargos', 'jefe'])->paginate(10);
         $ciudades = Ciudad::all();
         $paises = Pais::all();
         $cargos = Cargo::all();
@@ -152,9 +153,11 @@ class EmpleadoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Empleado $empleado)
+    public function destroy($id)
     {
-        $empleado->update(['activo' => false]);
+        $empleado = Empleado::findOrFail($id);
+        $empleado->delete();
+
         return redirect()->route('empleados.index')->with('success', 'Empleado eliminado correctamente.');
     }
 }

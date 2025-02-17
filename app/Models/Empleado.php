@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 class Empleado extends Model
 {
     use HasFactory;
-    protected $fillable = ['nombres', 'apellidos', 'identificacion', 'direccion', 'telefono', 'ciudad_id', 'jefe_id', 'activo'];
+    protected $fillable = ['nombres', 'apellidos', 'identificacion', 'direccion', 'telefono', 'ciudad_id', 'pais_id','jefe_id', 'activo'];
 
     public function ciudad()
     {
 
-        return $this->belongsTo(Ciudad::class);
+        // return $this->belongsTo(Ciudad::class);
 
         return $this->belongsTo(Ciudad::class, 'ciudad_id');
     }

@@ -75,26 +75,27 @@
                         </td>
                         <td class="d-flex justify-content-center align-items-center flex-wrap gap-2" style="height: 100%;">
                             <a href="#" 
-                               class="btn btn-edit" 
-                               style="min-width: 50px; color: rgb(69, 48, 218);" 
-                               data-id="{{ $empleado->id }}"
-                               data-nombres="{{ $empleado->nombres }}"
-                               data-apellidos="{{ $empleado->apellidos }}"
-                               data-identificacion="{{ $empleado->identificacion }}"
-                               data-telefono="{{ $empleado->telefono }}"
-                               data-direccion="{{ $empleado->direccion }}"
-                               data-pais-id="{{ $empleado->pais_id }}"
-                               data-ciudad-id="{{ $empleado->ciudad->id }}"
-                               data-jefe-id="{{ $empleado->jefe ? $empleado->jefe->id : '' }}"
-                               data-cargos='@json($empleado->cargos->pluck("id"))'>
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
-                            </a>
+                                class="btn btn-edit" 
+                                style="min-width: 50px; color: rgb(69, 48, 218);" 
+                                data-id="{{ $empleado->id }}"
+                                data-nombres="{{ $empleado->nombres }}"
+                                data-apellidos="{{ $empleado->apellidos }}"
+                                data-identificacion="{{ $empleado->identificacion }}"
+                                data-telefono="{{ $empleado->telefono }}"
+                                data-direccion="{{ $empleado->direccion }}"
+                                data-pais-id="{{ $empleado->pais_id }}"
+                                data-ciudad-id="{{ $empleado->ciudad_id }}"
+                                data-jefe-id="{{ $empleado->jefe ? $empleado->jefe->id : '' }}"
+                                data-cargos='@json($empleado->cargos->pluck("id"))'
+                                data-es-presidente="{{ $empleado->cargos->contains('nombre', 'Presidente') ? 'true' : 'false' }}">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </a>
                             <form action="{{ route('empleados.destroy', $empleado) }}" method="POST" class="d-inline">
                                 @csrf 
                                 @method('DELETE')
-                                <a class="btn" style="min-width: 50px; color:rgb(69, 48, 218);" onclick="return confirm('¿Eliminar este empleado?')">
+                                <button type="submit" class="btn" style="min-width: 50px; color: rgb(69, 48, 218);" onclick="return confirm('¿Eliminar este empleado?')">
                                     <i class="fas fa-trash"></i>
-                                </a>
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -171,6 +172,8 @@
                    <input type="text" name="direccion" id="edit_direccion" class="form-control" style="border-radius: 18px;" required>
                 </div>
              </div>
+
+         
              
              <div class="form-group mt-3">
                 <label for="edit_jefe_id">Asignar jefe</label>
@@ -329,126 +332,99 @@
     });
 </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const editButtons = document.querySelectorAll('.btn-edit');
-      
-      editButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-          e.preventDefault();
-          
-          const id              = this.getAttribute('data-id');
-          const nombres         = this.getAttribute('data-nombres');
-          const apellidos       = this.getAttribute('data-apellidos');
-          const identificacion  = this.getAttribute('data-identificacion');
-          const telefono        = this.getAttribute('data-telefono');
-          const direccion       = this.getAttribute('data-direccion');
-          const paisId          = this.getAttribute('data-pais-id');
-          const ciudadId        = this.getAttribute('data-ciudad-id');
-          const jefeId          = this.getAttribute('data-jefe-id');
-          const cargos          = JSON.parse(this.getAttribute('data-cargos'));
-          
-          if(document.getElementById('edit_nombres'))
-            document.getElementById('edit_nombres').value = nombres;
-          if(document.getElementById('edit_apellidos'))
-            document.getElementById('edit_apellidos').value = apellidos;
-          if(document.getElementById('edit_identificacion'))
-            document.getElementById('edit_identificacion').value = identificacion;
-          if(document.getElementById('edit_telefono'))
-            document.getElementById('edit_telefono').value = telefono;
-          if(document.getElementById('edit_direccion'))
-            document.getElementById('edit_direccion').value = direccion;
-          
-          const editPais = document.getElementById('edit_pais');
-          if(editPais) {
-            editPais.value = paisId;
-          }
-          
-          const editCiudad = document.getElementById('edit_ciudad');
-          if(editCiudad) {
-            if (!paisId || paisId.trim() === "") {
-              editCiudad.innerHTML = '<option value="">Seleccione un país primero</option>';
-            } else {
-              editCiudad.innerHTML = '<option value="">Cargando...</option>';
-              fetch(`/api/ciudades/${paisId}`)
-                .then(response => response.json())
-                .then(data => {
-                  editCiudad.innerHTML = '<option value="">Seleccione una ciudad</option>';
-                  data.forEach(ciudad => {
-                    const option = document.createElement('option');
-                    option.value = ciudad.id;
-                    option.textContent = ciudad.nombre;
-                    editCiudad.appendChild(option);
-                  });
-                  editCiudad.value = ciudadId;
-                })
-                .catch(error => {
-                  console.error("Error al cargar ciudades:", error);
-                  editCiudad.innerHTML = '<option value="">Error al cargar ciudades</option>';
-                });
-            }
-          }
-          
-          // Asignar el jefe
-          if(document.getElementById('edit_jefe_id'))
-            document.getElementById('edit_jefe_id').value = jefeId;
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const editButtons = document.querySelectorAll('.btn-edit');
 
-          const editCargos = document.getElementById('edit_cargos');
-          if(editCargos) {
-            Array.from(editCargos.options).forEach(option => option.selected = false);
-            cargos.forEach(cargoId => {
-              const option = editCargos.querySelector(`option[value="${cargoId}"]`);
-              if(option) {
-                option.selected = true;
-              }
-            });
-          }
-          
-        
-          const form = document.getElementById('formEditarEmpleado');
-          if(form) {
-            form.action = `/empleados/${id}`;
-          }
-          
-         
           const modalEl = document.getElementById('modalEditarEmpleado');
-          if(modalEl) {
-            var modalEditar = new bootstrap.Modal(modalEl);
-            modalEditar.show();
-          }
-        });
-      });
-      
-    
-      const editPaisSelect = document.getElementById('edit_pais');
-      if (editPaisSelect) {
-        editPaisSelect.addEventListener('change', function() {
-          const paisId = this.value;
-          const editCiudad = document.getElementById('edit_ciudad');
-          if (!paisId || paisId.trim() === "") {
-            editCiudad.innerHTML = '<option value="">Seleccione un país primero</option>';
-            return;
-          }
-          editCiudad.innerHTML = '<option value="">Cargando...</option>';
-          fetch(`/api/ciudades/${paisId}`)
-            .then(response => response.json())
-            .then(data => {
-              editCiudad.innerHTML = '<option value="">Seleccione una ciudad</option>';
-              data.forEach(ciudad => {
-                const option = document.createElement('option');
-                option.value = ciudad.id;
-                option.textContent = ciudad.nombre;
-                editCiudad.appendChild(option);
-              });
-            })
-            .catch(error => {
-              console.error("Error al cargar ciudades:", error);
-              editCiudad.innerHTML = '<option value="">Error al cargar ciudades</option>';
-            });
-        });
-      }
-    });
-    </script>
-    
+          const modalEditar = new bootstrap.Modal(modalEl);
+        
+          editButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+              e.preventDefault();
 
+              const id             = this.getAttribute('data-id');
+              const nombres        = this.getAttribute('data-nombres');
+              const apellidos      = this.getAttribute('data-apellidos');
+              const identificacion = this.getAttribute('data-identificacion');
+              const telefono       = this.getAttribute('data-telefono');
+              const direccion      = this.getAttribute('data-direccion');
+              const paisId         = this.getAttribute('data-pais-id');
+              const ciudadId       = this.getAttribute('data-ciudad-id');
+              const jefeId         = this.getAttribute('data-jefe-id');
+              const cargos         = JSON.parse(this.getAttribute('data-cargos'));
+              
+              // Saber si es Presidente
+              const esPresidente   = this.getAttribute('data-es-presidente') === 'true';
+        
+              document.getElementById('edit_nombres').value = nombres;
+              document.getElementById('edit_apellidos').value = apellidos;
+              document.getElementById('edit_identificacion').value = identificacion;
+              document.getElementById('edit_telefono').value = telefono;
+              document.getElementById('edit_direccion').value = direccion;
+        
+              const editPais = document.getElementById('edit_pais');
+              editPais.value = paisId;
+        
+              const editCiudad = document.getElementById('edit_ciudad');
+              if (paisId) {
+                editCiudad.innerHTML = '<option value="">Cargando...</option>';
+                fetch(`/api/ciudades/${paisId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        editCiudad.innerHTML = '<option value="">Seleccione una ciudad</option>';
+                        data.forEach(ciudad => {
+                            const option = document.createElement('option');
+                            option.value = ciudad.id;
+                            option.textContent = ciudad.nombre;
+                            editCiudad.appendChild(option);
+                        });
+                        editCiudad.value = ciudadId;
+                    })
+                    .catch(error => {
+                        console.error("Error al cargar ciudades:", error);
+                        editCiudad.innerHTML = '<option value="">Error al cargar ciudades</option>';
+                    });
+              } else {
+                editCiudad.innerHTML = '<option value="">Seleccione un país primero</option>';
+              }
+        
+              const editJefe = document.getElementById('edit_jefe_id');
+              editJefe.value = jefeId;
+        
+              const editCargos = document.getElementById('edit_cargos');
+              Array.from(editCargos.options).forEach(option => option.selected = false);
+              cargos.forEach(cargoId => {
+                const option = editCargos.querySelector(`option[value="${cargoId}"]`);
+                if(option) option.selected = true;
+              });
+    
+              if (esPresidente) {
+                editJefe.addEventListener('change', function() {
+                    if (editJefe.value !== '') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Acción no permitida',
+                        text: 'No se puede asignar un jefe a un Presidente.'
+                    }).then(() => {
+                        editJefe.value = '';
+                        modalEditar.hide();
+                    });
+                    }
+                }, { once: true });
+                }
+        
+              // Actualizar la ruta del formulario
+              const form = document.getElementById('formEditarEmpleado');
+              form.action = `/empleados/${id}`;
+        
+              // Mostrar el modal
+              const modalEl = document.getElementById('modalEditarEmpleado');
+              const modalEditar = new bootstrap.Modal(modalEl);
+              modalEditar.show();
+            });
+          });
+        });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection 

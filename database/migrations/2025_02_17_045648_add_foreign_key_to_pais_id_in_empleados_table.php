@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPaisIdToEmpleadosTable extends Migration
+class AddForeignKeyToPaisIdInEmpleadosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,11 @@ class AddPaisIdToEmpleadosTable extends Migration
     public function up()
     {
         Schema::table('empleados', function (Blueprint $table) {
-            $table->unsignedBigInteger('pais_id')->nullable()->after('ciudad_id');
-            $table->foreign('pais_id')->references('id')->on('paises')->onDelete('set null');
+            // Se asume que la columna pais_id ya existe en la tabla.
+            $table->foreign('pais_id')
+                  ->references('id')
+                  ->on('paises')
+                  ->onDelete('cascade'); // Puedes cambiar la acción de eliminación según tus necesidades.
         });
     }
 
@@ -27,7 +30,7 @@ class AddPaisIdToEmpleadosTable extends Migration
     public function down()
     {
         Schema::table('empleados', function (Blueprint $table) {
-            //
+            $table->dropForeign(['pais_id']);
         });
     }
 }
